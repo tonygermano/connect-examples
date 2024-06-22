@@ -141,7 +141,7 @@ function tryWithResources() {
 }
 tryWithResources.makeCloseable = function makeCloseable(object, closeFunction) {
     return new JavaAdapter(java.io.Closeable, {
-        close: function close() {closeFunction.call(object)},
+        close: function close() {closeFunction(object)},
         getObject: function getObject() {return object}
     })
 }

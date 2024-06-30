@@ -1,6 +1,6 @@
 var XMLLists = (function () {
     
-    // Change the value of this flag to false if you do not want to modify Array.prototype
+    // Change the value of this flag to false if you do not want to add Array.prototype.toXMLList
     const ADD_ARRAY_PROTOTYPE_TO_XMLLIST = true
 
 

@@ -1,3 +1,8 @@
+/**
+	@copyright 2024 Tony Germano
+	@license MPL-2.0
+*/
+
 var XMLLists = (function () {
     
     // Change the value of this flag to false if you do not want to add Array.prototype.toXMLList

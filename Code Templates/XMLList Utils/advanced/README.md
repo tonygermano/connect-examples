@@ -133,7 +133,29 @@ OBX|37||REPORT|32|||||||F|||20230715143617
 Following are the requirements for this transformation:
 - The inbound message can have multiple ORC/OBR pairs representing different
    orders.
-- The OBX segments represent a report with one line per segment. This single
-  report describes the results for all orders present in the message.
+- The OBX segments collectively represent a report with the values in OBX-5
+  each representing a single line of the report. This single report describes
+  the results for all orders present in the message.
 - The report can be divided into two sections:
-  - A header, the last line of which is the line beginning with "PHYSICIAN:" or any line that follow it until a blank line is reached.
+  - A header, the end of which is determined by the line beginning with
+    "PHYSICIAN:" followed by zero or more non-blank lines of text, followed by
+    one or more blank-lines of text.
+  - The report body, which is all of the OBX segments following the header.
+- In the header section,
+  - any blank lines should be removed.
+  - a divider consisting of the string `-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-`
+    should be appended to the end.
+- In the report section,
+  - consecutive blank lines should be condensed to a single blank line.
+  - lines longer than 60 characters should be wrapped to multiple lines so that
+    they do not exceed 60 characters.
+- OBX segments added in either section should retain values common to all of
+  the segments in the components following OBX-5.
+- OBX-1 should be numbered consecutively for all OBX segments starting at 1.
+- OBX-3 should be updated with a value of "HEADER" or "REPORT" indicating to
+  which section the OBX segment belongs.
+- OBX-4 should be numbered consecutively within each section indicated by OBX-3
+  starting each section at 1.
+- A copy of the entire message should be made with only a single ORC/OBR pair
+  per message for each pair present in the original message.
+- ORC-1 should be updated for each copy of the message to have a value of `RE`.

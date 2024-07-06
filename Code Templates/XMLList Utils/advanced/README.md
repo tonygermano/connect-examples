@@ -158,3 +158,16 @@ Following are the requirements for this transformation:
 - A copy of the entire message should be made with only a single ORC/OBR pair
   per message for each pair present in the original message.
 - ORC-1 should be updated for each copy of the message to have a value of `RE`.
+
+### Example 1 - functional
+The first example is using ES5 syntax and the Immutable.js library v3.8.2. It
+was tested in Mirth 3.4.0. This example utilizes a functional programming
+approach. We begin by converting the list of segments to an Immutable Sequence.
+While this version of mirth does not support `Symbol`s, the Immutable.js
+library does support the faux iterator key, and can therefore create a
+lazy sequence from our XMLList without requiring an intermediate conversion
+to an Array.
+
+From there we break the sequence down into sections which we will then use to
+reassemble the messages at the end. This method will be utilized in all of the
+examples, though it will be accomplished in slightly different ways.

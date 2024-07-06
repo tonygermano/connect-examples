@@ -1,10 +1,13 @@
 /**
+	This provides the XMLLists library object, which contains several methods for converting
+	to and from XMLList objects.
+
 	@copyright 2024 Tony Germano
 	@license MPL-2.0
 */
 
 var XMLLists = (function () {
-    
+
     // Change the value of this flag to false if you do not want to add Array.prototype.toXMLList
     const ADD_ARRAY_PROTOTYPE_TO_XMLLIST = true
 

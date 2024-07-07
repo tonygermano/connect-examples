@@ -3,7 +3,7 @@ Here we will show multiple ways to solve the same problem using this library.
 All methods will start with this inbound ORU message:
 
 ```
-MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R 01|12345|P|2.3
+MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R01|12345|P|2.3
 PID|||54658945213||Last^First||20190425|M|||^^^^^U SA|||||||20190425|000000001
 PV1|1|E|PVED^ED02^ED02^EPVB^R||||1851634828^Last^First^E|1851634828^Last^First^E||1|||||||||370144214|||||||||||||||||||||||||20190418220755
 ORC|CN
@@ -43,7 +43,7 @@ OBX|28||||||||||F|||20230715143617
 And will produce this outbound message consisting of multiple ORU messages:
 
 ```
-MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R 01|12345|P|2.3
+MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R01|12345|P|2.3
 PID|||54658945213||Last^First||20190425|M|||^^^^^U SA|||||||20190425|000000001
 PV1|1|E|PVED^ED02^ED02^EPVB^R||||1851634828^Last^First^E|1851634828^Last^First^E||1|||||||||370144214|||||||||||||||||||||||||20190418220755
 ORC|RE
@@ -85,7 +85,7 @@ OBX|34||REPORT|29|signal differentiation.   Globes, optic nerves and orbital||||
 OBX|35||REPORT|30|muscles and periorbital muscles are symmetric.  Retroorbital||||||F|||20230715143617
 OBX|36||REPORT|31|fat signal unremarkable.   ||||||F|||20230715143617
 OBX|37||REPORT|32|||||||F|||20230715143617
-MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R 01|12345|P|2.3
+MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R01|12345|P|2.3
 PID|||54658945213||Last^First||20190425|M|||^^^^^U SA|||||||20190425|000000001
 PV1|1|E|PVED^ED02^ED02^EPVB^R||||1851634828^Last^First^E|1851634828^Last^First^E||1|||||||||370144214|||||||||||||||||||||||||20190418220755
 ORC|RE

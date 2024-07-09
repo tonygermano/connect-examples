@@ -1,141 +1,18 @@
-## Advanced Example
-Here we will show multiple ways to solve the same problem using this library.
-All methods will start with this inbound ORU message:
+# Advanced ORU Manipulation
+Here we will show three different, but similar, ways to solve the same problem
+using this library.
 
-```
-MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R01|12345|P|2.3
-PID|||54658945213||Last^First||20190425|M|||^^^^^U SA|||||||20190425|000000001
-PV1|1|E|PVED^ED02^ED02^EPVB^R||||1851634828^Last^First^E|1851634828^Last^First^E||1|||||||||370144214|||||||||||||||||||||||||20190418220755
-ORC|CN
-OBR|1|PV4430266CTPVMC|PV4430266CTPVMC|CT HEAD WO CONTRAST^CT HEAD WO CONTRAST|||20190418223311|||||||||1851634828^Last^First^E||PV4430266CTPVMC|1|1|286701130|20190418224856||CT|F||^^^20190418221731^20190418221355^S|||||0052005^Last^First^A||||20190418221500
-ORC|RE
-OBR|2|PV4430267CTPVMC|PV4430267CTPVMC|CT CERVICAL SPINE WO CONTRAST^CT CERVICAL SPINE WO CONTRAST|||20190418223311|20190418221731||||||||1851634828^HACKMAN^SCOTT^E||PV4430267CTPVMC|1|1|286701131|20190418224856||CT|F||^^^20190418221731^20190418221340^S|||||0052005^Last^First^A||||20190418222000
-OBX|1||||						||||||F|||20230715143617
-OBX|2||||RADIOLOGY REPORT||||||F|||20230715143617
-OBX|3||||||||||F|||20230715143617
-OBX|4||||NAME:  LAST, FIRST      DATE OF EXAM: 06-25-2024 ||||||F|||20230715143617
-OBX|5||||||||||F|||20230715143617
-OBX|6||||DATE OF BIRTH:  01-01-2025     CHART #: 999999-WW ||||||F|||20230715143617
-OBX|7||||||||||F|||20230715143617
-OBX|8||||PHYSICIAN:  First Last, MD ||||||F|||20230715143617
-OBX|9||||||||||F|||20230715143617
-OBX|10||||MRI OF THE BRAIN WITH AND WITHOUT CONTRAST ||||||F|||20230715143617
-OBX|11||||||||||F|||20230715143617
-OBX|12||||CLINICAL INDICATION:   Headaches, migraines.  ||||||F|||20230715143617
-OBX|13||||||||||F|||20230715143617
-OBX|14||||||||||F|||20230715143617
-OBX|15||||Multiplanar and multiparametric MRI imaging of the brain was performed.||||||F|||20230715143617
-OBX|16||||||||||F|||20230715143617
-OBX|17||||ADC map and diffusion weighted acquisition reveal no area of restriction to suggest acute infarction.   ||||||F|||20230715143617
-OBX|18||||||||||F|||20230715143617
-OBX|19||||Sagittal T1 shows no cerebellar tonsillar herniation.  Pontine and midbrain regions are unremarkable.    Optic chiasm and pituitary gland signal were unremarkable.  ||||||F|||20230715143617
-OBX|20||||||||||F|||20230715143617
-OBX|21||||Axial T1 shows no conspicuous T1 shortening region.   ||||||F|||20230715143617
-OBX|22||||||||||F|||20230715143617
-OBX|23||||||||||F|||20230715143617
-OBX|24||||||||||F|||20230715143617
-OBX|25||||Axial T2 shows sellar and suprasellar regions to appear unremarkable.    The 7th and 8th nerves were symmetric bilaterally.   Cerebellar pontine angle presentation was unremarkable.   No evidence of any cerebellar pontine angle mass.   The mastoid air cell signal presentation unremarkable.  Normal flow void of basilar, carotid and middle cerebral distribution was identified.   No conspicuous paraventricular T2 prolongation to suggest demyelinating or dysmyelinating process or small vessel ischemic change identified.   ||||||F|||20230715143617
-OBX|26||||||||||F|||20230715143617
-OBX|27||||Paranasal sinuses appear patent.   Normal gray white matter signal differentiation.   Globes, optic nerves and orbital muscles and periorbital muscles are symmetric.  Retroorbital fat signal unremarkable.   ||||||F|||20230715143617
-OBX|28||||||||||F|||20230715143617
-```
+All methods will start with the same inbound ORU message ([inbound.hl7](inbound.hl7)) and
+produce the same compound outbound message ([outbound.hl7](outbound.hl7).)
 
-And will produce this outbound message consisting of multiple ORU messages:
-
-```
-MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R01|12345|P|2.3
-PID|||54658945213||Last^First||20190425|M|||^^^^^U SA|||||||20190425|000000001
-PV1|1|E|PVED^ED02^ED02^EPVB^R||||1851634828^Last^First^E|1851634828^Last^First^E||1|||||||||370144214|||||||||||||||||||||||||20190418220755
-ORC|RE
-OBR|1|PV4430266CTPVMC|PV4430266CTPVMC|CT HEAD WO CONTRAST^CT HEAD WO CONTRAST|||20190418223311|||||||||1851634828^Last^First^E||PV4430266CTPVMC|1|1|286701130|20190418224856||CT|F||^^^20190418221731^20190418221355^S|||||0052005^Last^First^A||||20190418221500
-OBX|1||HEADER|1|RADIOLOGY REPORT||||||F|||20230715143617
-OBX|2||HEADER|2|NAME:  LAST, FIRST      DATE OF EXAM: 06-25-2024 ||||||F|||20230715143617
-OBX|3||HEADER|3|DATE OF BIRTH:  01-01-2025     CHART #: 999999-WW ||||||F|||20230715143617
-OBX|4||HEADER|4|PHYSICIAN:  First Last, MD ||||||F|||20230715143617
-OBX|5||HEADER|5|-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-||||||F|||20230715143617
-OBX|6||REPORT|1|MRI OF THE BRAIN WITH AND WITHOUT CONTRAST ||||||F|||20230715143617
-OBX|7||REPORT|2|||||||F|||20230715143617
-OBX|8||REPORT|3|CLINICAL INDICATION:   Headaches, migraines.  ||||||F|||20230715143617
-OBX|9||REPORT|4|||||||F|||20230715143617
-OBX|10||REPORT|5|Multiplanar and multiparametric MRI imaging of the brain was||||||F|||20230715143617
-OBX|11||REPORT|6|performed.||||||F|||20230715143617
-OBX|12||REPORT|7|||||||F|||20230715143617
-OBX|13||REPORT|8|ADC map and diffusion weighted acquisition reveal no area of||||||F|||20230715143617
-OBX|14||REPORT|9|restriction to suggest acute infarction.   ||||||F|||20230715143617
-OBX|15||REPORT|10|||||||F|||20230715143617
-OBX|16||REPORT|11|Sagittal T1 shows no cerebellar tonsillar herniation. ||||||F|||20230715143617
-OBX|17||REPORT|12|Pontine and midbrain regions are unremarkable.    Optic||||||F|||20230715143617
-OBX|18||REPORT|13|chiasm and pituitary gland signal were unremarkable.  ||||||F|||20230715143617
-OBX|19||REPORT|14|||||||F|||20230715143617
-OBX|20||REPORT|15|Axial T1 shows no conspicuous T1 shortening region.   ||||||F|||20230715143617
-OBX|21||REPORT|16|||||||F|||20230715143617
-OBX|22||REPORT|17|Axial T2 shows sellar and suprasellar regions to appear||||||F|||20230715143617
-OBX|23||REPORT|18|unremarkable.    The 7th and 8th nerves were symmetric||||||F|||20230715143617
-OBX|24||REPORT|19|bilaterally.   Cerebellar pontine angle presentation was||||||F|||20230715143617
-OBX|25||REPORT|20|unremarkable.   No evidence of any cerebellar pontine angle||||||F|||20230715143617
-OBX|26||REPORT|21|mass.   The mastoid air cell signal presentation||||||F|||20230715143617
-OBX|27||REPORT|22|unremarkable.  Normal flow void of basilar, carotid and||||||F|||20230715143617
-OBX|28||REPORT|23|middle cerebral distribution was identified.   No||||||F|||20230715143617
-OBX|29||REPORT|24|conspicuous paraventricular T2 prolongation to suggest||||||F|||20230715143617
-OBX|30||REPORT|25|demyelinating or dysmyelinating process or small vessel||||||F|||20230715143617
-OBX|31||REPORT|26|ischemic change identified.   ||||||F|||20230715143617
-OBX|32||REPORT|27|||||||F|||20230715143617
-OBX|33||REPORT|28|Paranasal sinuses appear patent.   Normal gray white matter||||||F|||20230715143617
-OBX|34||REPORT|29|signal differentiation.   Globes, optic nerves and orbital||||||F|||20230715143617
-OBX|35||REPORT|30|muscles and periorbital muscles are symmetric.  Retroorbital||||||F|||20230715143617
-OBX|36||REPORT|31|fat signal unremarkable.   ||||||F|||20230715143617
-OBX|37||REPORT|32|||||||F|||20230715143617
-MSH|^~\&|PS360|SCL|PACS|PVMC|20190418225003||ORU^R01|12345|P|2.3
-PID|||54658945213||Last^First||20190425|M|||^^^^^U SA|||||||20190425|000000001
-PV1|1|E|PVED^ED02^ED02^EPVB^R||||1851634828^Last^First^E|1851634828^Last^First^E||1|||||||||370144214|||||||||||||||||||||||||20190418220755
-ORC|RE
-OBR|2|PV4430267CTPVMC|PV4430267CTPVMC|CT CERVICAL SPINE WO CONTRAST^CT CERVICAL SPINE WO CONTRAST|||20190418223311|20190418221731||||||||1851634828^HACKMAN^SCOTT^E||PV4430267CTPVMC|1|1|286701131|20190418224856||CT|F||^^^20190418221731^20190418221340^S|||||0052005^Last^First^A||||20190418222000
-OBX|1||HEADER|1|RADIOLOGY REPORT||||||F|||20230715143617
-OBX|2||HEADER|2|NAME:  LAST, FIRST      DATE OF EXAM: 06-25-2024 ||||||F|||20230715143617
-OBX|3||HEADER|3|DATE OF BIRTH:  01-01-2025     CHART #: 999999-WW ||||||F|||20230715143617
-OBX|4||HEADER|4|PHYSICIAN:  First Last, MD ||||||F|||20230715143617
-OBX|5||HEADER|5|-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-||||||F|||20230715143617
-OBX|6||REPORT|1|MRI OF THE BRAIN WITH AND WITHOUT CONTRAST ||||||F|||20230715143617
-OBX|7||REPORT|2|||||||F|||20230715143617
-OBX|8||REPORT|3|CLINICAL INDICATION:   Headaches, migraines.  ||||||F|||20230715143617
-OBX|9||REPORT|4|||||||F|||20230715143617
-OBX|10||REPORT|5|Multiplanar and multiparametric MRI imaging of the brain was||||||F|||20230715143617
-OBX|11||REPORT|6|performed.||||||F|||20230715143617
-OBX|12||REPORT|7|||||||F|||20230715143617
-OBX|13||REPORT|8|ADC map and diffusion weighted acquisition reveal no area of||||||F|||20230715143617
-OBX|14||REPORT|9|restriction to suggest acute infarction.   ||||||F|||20230715143617
-OBX|15||REPORT|10|||||||F|||20230715143617
-OBX|16||REPORT|11|Sagittal T1 shows no cerebellar tonsillar herniation. ||||||F|||20230715143617
-OBX|17||REPORT|12|Pontine and midbrain regions are unremarkable.    Optic||||||F|||20230715143617
-OBX|18||REPORT|13|chiasm and pituitary gland signal were unremarkable.  ||||||F|||20230715143617
-OBX|19||REPORT|14|||||||F|||20230715143617
-OBX|20||REPORT|15|Axial T1 shows no conspicuous T1 shortening region.   ||||||F|||20230715143617
-OBX|21||REPORT|16|||||||F|||20230715143617
-OBX|22||REPORT|17|Axial T2 shows sellar and suprasellar regions to appear||||||F|||20230715143617
-OBX|23||REPORT|18|unremarkable.    The 7th and 8th nerves were symmetric||||||F|||20230715143617
-OBX|24||REPORT|19|bilaterally.   Cerebellar pontine angle presentation was||||||F|||20230715143617
-OBX|25||REPORT|20|unremarkable.   No evidence of any cerebellar pontine angle||||||F|||20230715143617
-OBX|26||REPORT|21|mass.   The mastoid air cell signal presentation||||||F|||20230715143617
-OBX|27||REPORT|22|unremarkable.  Normal flow void of basilar, carotid and||||||F|||20230715143617
-OBX|28||REPORT|23|middle cerebral distribution was identified.   No||||||F|||20230715143617
-OBX|29||REPORT|24|conspicuous paraventricular T2 prolongation to suggest||||||F|||20230715143617
-OBX|30||REPORT|25|demyelinating or dysmyelinating process or small vessel||||||F|||20230715143617
-OBX|31||REPORT|26|ischemic change identified.   ||||||F|||20230715143617
-OBX|32||REPORT|27|||||||F|||20230715143617
-OBX|33||REPORT|28|Paranasal sinuses appear patent.   Normal gray white matter||||||F|||20230715143617
-OBX|34||REPORT|29|signal differentiation.   Globes, optic nerves and orbital||||||F|||20230715143617
-OBX|35||REPORT|30|muscles and periorbital muscles are symmetric.  Retroorbital||||||F|||20230715143617
-OBX|36||REPORT|31|fat signal unremarkable.   ||||||F|||20230715143617
-OBX|37||REPORT|32|||||||F|||20230715143617
-```
-
+## Requirements
 Following are the requirements for this transformation:
 - The inbound message can have multiple ORC/OBR pairs representing different
    orders.
 - The OBX segments collectively represent a report with the values in OBX-5
   each representing a single line of the report. This single report describes
   the results for all orders present in the message.
-- The report can be divided into two sections:
+- The report text can be divided into two sections:
   - A header, the end of which is determined by the line beginning with
     "PHYSICIAN:" followed by zero or more non-blank lines of text, followed by
     one or more blank-lines of text.
@@ -155,19 +32,48 @@ Following are the requirements for this transformation:
   which section the OBX segment belongs.
 - OBX-4 should be numbered consecutively within each section indicated by OBX-3
   starting each section at 1.
-- A copy of the entire message should be made with only a single ORC/OBR pair
+- A copy of the entire message should be made with only a single ORC+OBR pair
   per message for each pair present in the original message.
 - ORC-1 should be updated for each copy of the message to have a value of `RE`.
+- The outbound message should be all of the individual new messages joined
+  together.
 
-### Example 1 - functional
+## Examples
+The setup and approach for all of the solutions are the same. The code was
+tested in a destination transformer where the inbound type is hl7v2 and the
+outbound type is Raw (since we will be serializing and combining multiple
+messages into one.)
+
+The general idea is to break the message into different components that can
+later be reassembled to create the new messages. The components are the "top
+section" consisting of the MSH segment until the first ORC segment, the "ORC
+groups" which is a collection of ORC+OBR pairs, the OBX segments comprising
+the report header, and the OBX segments comprising the report body. The
+header and report body sections are further modified, adding or removing OBX
+segments as required, before finally reassembling individual messages for each
+ORC group.
+
+### Example 1 - functional : es5 + immutable.js
 The first example is using ES5 syntax and the Immutable.js library v3.8.2. It
-was tested in Mirth 3.4.0. This example utilizes a functional programming
-approach. We begin by converting the list of segments to an Immutable Sequence.
+was tested in Mirth 3.4.0. The source code is found in
+[es5+immutable.js_3_8_2.js](es5+immutable.js_3_8_2.js).
+This example utilizes a functional programming approach.
+
+We begin by converting the list of segments to an Immutable Sequence.
 While this version of mirth does not support `Symbol`s, the Immutable.js
 library does support the faux iterator key, and can therefore create a
 lazy sequence from our XMLList without requiring an intermediate conversion
 to an Array.
 
-From there we break the sequence down into sections which we will then use to
-reassemble the messages at the end. This method will be utilized in all of the
-examples, though it will be accomplished in slightly different ways.
+The Immutable.js library is used as an example of how third-party libraries can
+be used to provided powerful list and sequence processing tools to even old
+versions of mirth. For example, the `takeUntil`, `skipUntil`, and `flatMap`
+methods.
+
+Finally, the Immutable data structures are converted back to an XMLList by
+converting to arrays, and then using the `Array.prototype.toXMLList` method
+added by this library. That list is then used in an e4x template to create the
+XML messages, which are then serialized to ER7.
+
+### Example 2 - function : es6
+This example was tested in Mirth 4.5.0 and started with the source from Example 1.

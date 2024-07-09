@@ -41,7 +41,8 @@ var XMLLists = (function () {
     }
 
     function arrayLikeToXMLList(arrayLike) {
-        const len = arrayLike.length,
+        // Bitwise ORing any number x with 0 returns x converted to a 32-bit integer
+        const len = arrayLike.length | 0,
             result = new XMLList()
 
         if (len > 1) {
@@ -59,6 +60,49 @@ var XMLLists = (function () {
         }
 
         return result
+    }
+
+    function iteratorToXMLList(iterator) {
+        const result = new XMLList(),
+            first = iterator.next(),
+            second = iterator.next()
+
+        if (!second.done) {
+            // see comment in arrayLikeToXMLList
+            result[0] = new XML()
+            result[1] = second.value
+            for (var next = iterator.next(), i = 2; !next.done; next = iterator.next(), i++) {
+                result[i] = next.value
+            }
+        }
+
+        if (!first.done) {
+            result[0] = first.value
+        }
+
+        return result
+    }
+
+    function from(object) {
+        // prefer array-like if length is a 32-bit integer
+        if (('length' in object) && (Number(object.length) === object.length | 0)) {
+            return arrayLikeToXMLList(object)
+        }
+
+        if (ITERATOR_SYMBOL in object) {
+            return iteratorToXMLList(object[ITERATOR_SYMBOL]())
+        }
+
+        // fall back to array-like if length is present, but not a 32-bit integer
+        if ('length' in object) {
+            return arrayLikeToXMLList(object)
+        }
+
+        if (object instanceof XMLList) {
+            return object.copy()
+        }
+
+        return <>{object}</>
     }
 
     // This implements the ES6 Iterator protocol.
@@ -92,6 +136,8 @@ var XMLLists = (function () {
         toArray: XMLListToArray,
         toIterable: XMLListToIterable,
         toIterator: XMLListToIterator,
-        fromArray: arrayLikeToXMLList
+        fromArray: arrayLikeToXMLList,
+        fromIterator: iteratorToXMLList,
+        from: from
     }
 })()

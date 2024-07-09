@@ -81,10 +81,18 @@ This example was tested in Mirth 4.5.0 and began with the source from Example 1.
 The source code is found in
 [es6-native-functional.js](es6-native-functional.js).
 
-Nearly all functions are converted to arrow functions.
-The Immutable Lists and Sequences are replaced by native arrays, but are
-otherwise treated as immutable, i.e., all operations return new arrays rather
-than modifying old ones. Since we are working with arrays this time, we begin
+Nearly all functions are converted to arrow functions. The Immutable Lists and
+Sequences are replaced by native arrays, but are otherwise treated as
+immutable, i.e., all operations return new arrays rather than modifying old
+ones.
+
+Some adjustments were needed with several of the Immutable methods no longer
+being available. We create our own `flatten` function due to
+`Array.prototype.flatMap` still not being available in Mirth. Without the
+`take` and `skip` families of methods being available to split arrays, instead
+we use `Array.prototype.findIndex` to find the split point, and then slice the two sections.
+
+Since we are working with arrays this time, we begin
 simply with `XMLLists.toArray`. The steps to get the sequence of segments from
 an array back to an XML message are the same as Example 1.
 

@@ -59,7 +59,8 @@ was tested in Mirth 3.4.0. The source code is found in
 [es5+immutable.js_3_8_2.js](es5+immutable.js_3_8_2.js).
 This example utilizes a functional programming approach.
 
-We begin by converting the list of segments to an Immutable Sequence.
+We begin by converting the list of segments to an Immutable Sequence using
+`XMLLists.toIterable`.
 While this version of mirth does not support `Symbol`s, the Immutable.js
 library does support the faux iterator key, and can therefore create a
 lazy sequence from our XMLList without requiring an intermediate conversion
@@ -76,4 +77,33 @@ added by this library. That list is then used in an e4x template to create the
 XML messages, which are then serialized to ER7.
 
 ### Example 2 - function : es6
-This example was tested in Mirth 4.5.0 and started with the source from Example 1.
+This example was tested in Mirth 4.5.0 and began with the source from Example 1.
+The source code is found in
+[es6-native-functional.js](es6-native-functional.js).
+
+Nearly all functions are converted to arrow functions.
+The Immutable Lists and Sequences are replaced by native arrays, but are
+otherwise treated as immutable, i.e., all operations return new arrays rather
+than modifying old ones. Since we are working with arrays this time, we begin
+simply with `XMLLists.toArray`. The steps to get the sequence of segments from
+an array back to an XML message are the same as Example 1.
+
+### Example 3 - procedural : es6
+This example was tested in Mirth 4.5.0 and is loosely based on the source from
+the other examples. The source code is found in
+[es6-native-procedural.js](es6-native-procedural.js).
+
+A few of the functions from the previous examples are reused, but many have
+been replaced in favor of building and modifying the arrays iteratively using
+`while` loops and `Array.prototype.forEach`.
+
+Here we begin by creating an iterator over all of the segments using
+`XMLLists.toIterator`. This lends itself well to allowing each section to
+consume only the segments that it needs and then pass the iterator to the next
+section.
+
+Like the other examples, we convert the array of segments using
+`Array.prototype.toXMLList`. However, rather than inserting the list into an
+e4x template, we use a two step approach. First the empty `<HL7Message/>` node
+is created. Then we use the e4x method `.setChildren()` to use our assembled
+segment list as the children of the new message.

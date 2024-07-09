@@ -105,10 +105,8 @@ OBXReport.forEach(obx => {
 	if (isTextNotBlank(obx)) {
 		wordWrap(obx).forEach(wrappedObx => newReportBody.push(wrappedObx))
 	}
-	else {
-		if (lastTextIsNotBlank) {
-			newReportBody.push(obx)
-		}
+	else if (isLastTextNotBlank) {
+		newReportBody.push(obx)
 	}
 	isLastTextNotBlank = isTextNotBlank(obx)
 })
@@ -121,7 +119,8 @@ var messages = []
 ORCGroups.forEach(group => {
 	group[0]['ORC.1']['ORC.1.1'] = 'RE'
 	var messageSegmentArray = topSection.concat(group, OBXHeader, OBXReport),
-		xmlMessage = <HL7Message>{messageSegmentArray.toXMLList()}</HL7Message>;
+		xmlMessage = <HL7Message/>;
+	xmlMessage.setChildren(messageSegmentArray.toXMLList())
 	messages.push(SerializerFactory.getSerializer('HL7V2').fromXML(xmlMessage))
 })
 

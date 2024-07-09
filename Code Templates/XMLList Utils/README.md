@@ -32,7 +32,7 @@ While e4x is a powerful tool, most javascript developers are not familiar with
 how to use it effectively. Meanwhile, javascript (and Rhino) keeps improving
 its support for array-like objects and iterables. This library lets you take
 advantage of the advances in native javascript as well as other libraries
-designed for handling collections (see advanced examples.)
+designed for handling collections (see [advanced examples](advanced_examples).)
 
 Additionally, more and more people like to write mirth code outside of the
 mirth editor. This library can lesson your dependence on e4x specific syntax

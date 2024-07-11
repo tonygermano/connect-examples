@@ -84,18 +84,19 @@ var XMLLists = (function () {
     }
 
     function from(object) {
-        // prefer array-like if length is a 32-bit integer
-        if (('length' in object) && (Number(object.length) === object.length | 0)) {
-            return arrayLikeToXMLList(object)
+        if (object == null) {
+            return new XMLList()
         }
 
-        if (ITERATOR_SYMBOL in object) {
-            return iteratorToXMLList(object[ITERATOR_SYMBOL]())
-        }
+        if (typeof object === 'object') {
+            if (ITERATOR_SYMBOL in object) {
+                return iteratorToXMLList(object[ITERATOR_SYMBOL]())
+            }
 
-        // fall back to array-like if length is present, but not a 32-bit integer
-        if ('length' in object) {
-            return arrayLikeToXMLList(object)
+            // fall back to array-like if length is present, but not a 32-bit integer
+            if ('length' in object) {
+                return arrayLikeToXMLList(object)
+            }
         }
 
         if (object instanceof XMLList) {
@@ -136,8 +137,6 @@ var XMLLists = (function () {
         toArray: XMLListToArray,
         toIterable: XMLListToIterable,
         toIterator: XMLListToIterator,
-        fromArray: arrayLikeToXMLList,
-        fromIterator: iteratorToXMLList,
         from: from
     }
 })()

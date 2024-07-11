@@ -8,20 +8,20 @@ supporting older mirth versions which only support ES5. These are all
 Four methods are defined:
 - `XMLLists.toArray(xmlList)` - returns a new array holding all of the same XML
   objects from the provided XMLList
-- `XMLLists.fromArray(arrayLike)` - returns a new XMLList holding all of the
-  XML objects from the provided array-like object
 - `XMLLists.toIterator(xmlList)` - returns an object implementing the ES6
   Iterator protocol which iterators over the provided XMLList.
 - `XMLLists.toIterable(xmlList)` - returns an object implementing the ES6
   Iterable protocol¹. That is, the object has a method assigned to the
   `Symbol.iterator` key, which returns an ES6 iterator which iterates over
   the provided XMLList.
+- `XMLLists.from(iterable|arrayLike)` - returns a new XMLList holding all of the
+  XML objects from the provided iterable or array-like object.
 
 _¹Mirth versions which don't support or are not running in ES6 mode will use
 the string `@@iterator` instead of `Symbol.iterator` as the property key._
 
 Additionally, the method `Array.prototype.toXMLList` will be added, which takes
-no parameters. This is a convenience method for calling `XMLLists.fromArray`
+no parameters. This is a convenience method for calling `XMLLists.from`
 with the array upon which it is called passed as the argument to the function.
 This allows for easy chaining. **IF YOU DO NOT WANT THIS METHOD ADDED**, change
 the value of the `ADD_ARRAY_PROTOTYPE_TO_XMLLIST` constant from `true` to

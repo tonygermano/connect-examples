@@ -498,8 +498,8 @@ var examples = [
         "/user/name"
     ],
     [
-        () => compile("/user/:id")({ id: "cafÃ©" }),
-        "/user/caf%C3%83%C2%A9"
+        () => compile("/user/:id")({ id: "café" }),
+        "/user/caf%C3%A9"
     ],
     [
         () => compile("/*segment")({ segment: ["foo"] }),
@@ -514,3 +514,4 @@ var examples = [
         "/user/%3A%2F"
     ]
 ]
+
